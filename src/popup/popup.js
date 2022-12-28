@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Present scan results.
     const activeTab = await getActiveTabURL();
     const webURL = activeTab.url;
-    chrome.storage.sync.get([webURL], (data) => {
-        for (let i = 0; i < data[webURL].length; i++) {
-            let adt = antiDebuggingTechniques[data[webURL][i]];
+    chrome.storage.sync.get([webURL + "_ADT"], (data) => {
+        for (let i = 0; i < data[webURL + "_ADT"].length; i++) {
+            let adt = antiDebuggingTechniques[data[webURL + "_ADT"][i]];
             // Mark categories that contain an entry.
             let categorySummaryElement = document.getElementById(adt.type + "-sum");
             categorySummaryElement.style.backgroundColor = "red";

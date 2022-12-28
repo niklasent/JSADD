@@ -3,19 +3,24 @@
     "version": "0.1.0",
     "description": "Detects the presence of various anti-debugging techniques implemented in a website.",
     "author": "Niklas Entschladen",
-    "permissions": ["storage", "tabs"],
+    "permissions": ["scripting", "storage", "tabs", "webNavigation"],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "./src/background.js"
     },
     "content_scripts": [
         {
-            "matches": ["*://*/*"],
-            "js": ["contentScript.js"]
+            "matches": ["<all_urls>"],
+            "js": ["./src/content/contentScript.js"],
+            "run_at": "document_start"
         }
     ],
     "action": {
         "default_title": "JSADD",
-        "default_popup": "popup.html"
+        "default_popup": "./src/popup/popup.html"
     },
     "manifest_version": 3
 }
