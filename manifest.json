@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Detects the presence of various anti-debugging techniques implemented in a website.",
     "author": "Niklas Entschladen",
-    "permissions": ["scripting", "storage", "tabs", "webNavigation"],
+    "permissions": ["debugger", "scripting", "storage", "tabs", "webNavigation"],
     "host_permissions": [
         "http://*/*",
         "https://*/*"
@@ -15,7 +15,7 @@
         {
             "matches": ["<all_urls>"],
             "js": ["./src/content/contentScript.js"],
-            "run_at": "document_start"
+            "run_at": "document_end"
         }
     ],
     "action": {

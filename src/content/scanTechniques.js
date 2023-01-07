@@ -14,7 +14,11 @@ const antiDebuggingTechniqueChecks = {
             detectedADTs.push(key);
         }
     });
-    window.postMessage(detectedADTs);
+    var msg = {
+        req: "ADT",
+        data: detectedADTs
+    };
+    window.postMessage(msg);
 })();
 
 /* Anti-Debugging Detection functions */
@@ -23,7 +27,6 @@ function checkShortCut() {
 
     // Collect all event listeners
     let eventListeners = listAllEventListeners();
-    console.log(eventListeners);
 
     // Check event behavior for applicable event listeners.
     eventListeners.forEach((eventListener) => {
@@ -85,9 +88,12 @@ function checkShortCut() {
 };
 
 function checkTrigBreak() {
-    var detected = true;
+    var msg = {
+        req: "trigbreak"
+    };
+    window.postMessage(msg);
 
-    return detected;
+    return undefined; // Checked by background script.
 };
 
 function checkConClear() {
