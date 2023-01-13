@@ -88,6 +88,7 @@ function checkShortCut() {
 };
 
 function checkTrigBreak() {
+    // Request TrigBreak check.
     var msg = {
         req: "trigbreak"
     };

@@ -9,6 +9,13 @@ chrome.runtime.onStartup.addListener(() => {
     callFrameIDsTabMap = {};
 });
 
+// Tell content scripts the tab ID whenever requested.
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    if (msg.req === "tabId") {
+        sendResponse({tabId: sender.tab.id});
+    }
+});
+
 // Register event listener for triggered breakpoints.
 chrome.debugger.onEvent.addListener((src, method, params) => {
     if (method === "Debugger.paused") {
@@ -24,12 +31,6 @@ chrome.debugger.onEvent.addListener((src, method, params) => {
     }
 });
 
-// Tell content scripts the tab ID whenever requested.
-chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    if (msg.req === "tabId") {
-        sendResponse({tabId: sender.tab.id});
-    }
-});
 
 // Set up long-lived connection.
 chrome.runtime.onConnect.addListener(function(port) {
@@ -73,6 +74,7 @@ chrome.webNavigation.onCompleted.addListener((tab) => {
     scriptidentifier++;
 });
 
+/* Functions for ADT detection */
 function checkTrigBreak(tabId) {
     // Attach and enable debugger.
     chrome.debugger.attach({ tabId: tabId }, "1.3", () => {

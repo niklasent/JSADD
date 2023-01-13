@@ -5,6 +5,7 @@
     const tab = await chrome.runtime.sendMessage({ req: "tabId" });
     const tabIdentifier = tab.tabId;
 
+    // Set up communication with background script. Update storage for reported ADTs.
     var port = chrome.runtime.connect({name: "adt_background_check"});
     port.onMessage.addListener(function(msg) {
         if (!siteADTs.includes(msg.adt)) {
@@ -13,7 +14,9 @@
         }
     });
 
+    // Communication with other content scritps.
     window.onmessage = (msg) => {
+        // Update storage for reported ADTs.
         if (msg.data.req === "ADT") {
             for (adt of msg.data.data) {
                 if (!siteADTs.includes(adt)) {
@@ -22,6 +25,7 @@
                 }
             }
         }
+        // Forward ADT check requests to background.
         else {
             let adt = msg.data.req;
             port.postMessage({req: adt, tabId: tabIdentifier});
