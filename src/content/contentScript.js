@@ -7,13 +7,19 @@
 
     var port = chrome.runtime.connect({name: "adt_background_check"});
     port.onMessage.addListener(function(msg) {
-        if (!siteADTs.includes(msg.adt)) siteADTs.push(msg.adt);
+        if (!siteADTs.includes(msg.adt)) {
+            siteADTs.push(msg.adt);
+            updateStorage(siteADTs);
+        }
     });
 
     window.onmessage = (msg) => {
         if (msg.data.req === "ADT") {
             for (adt of msg.data.data) {
-                if (!siteADTs.includes(adt)) siteADTs.push(adt);
+                if (!siteADTs.includes(adt)) {
+                    siteADTs.push(adt);
+                    updateStorage(siteADTs);
+                }
             }
         }
         else {
@@ -21,7 +27,6 @@
             port.postMessage({req: adt, tabId: tabIdentifier});
         }
     };
-    setInterval(updateStorage, 3000, siteADTs);
 })();
 
 function updateStorage(data) {
