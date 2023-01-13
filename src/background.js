@@ -51,6 +51,12 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
         js: ['./src/content/modifyEventTargets.js'],
         world: 'MAIN',
         runAt: "document_start"
+    }, {
+        id: scriptidentifier.toString() + "_modifyConsole",
+        matches: ["<all_urls>"],
+        js: ['./src/content/modifyConsole.js'],
+        world: 'MAIN',
+        runAt: "document_start"
     }]);
     scriptidentifier++;
 });
@@ -62,8 +68,7 @@ chrome.webNavigation.onCompleted.addListener((tab) => {
         id: scriptidentifier.toString() + "_scanTechniques",
         matches: ["<all_urls>"],
         js: ['./src/content/scanTechniques.js'],
-        world: 'MAIN',
-        runAt: "document_end"
+        world: 'MAIN'
     }]);
     scriptidentifier++;
 });
@@ -85,7 +90,7 @@ function checkTrigBreak(tabId) {
             }
         });
     });
-    // Detach debugger after *2 seconds* and return result.
+    // Detach debugger after *2 seconds*.
     setTimeout(() => {
         chrome.debugger.detach({ tabId: tabId });
     }, 2000);

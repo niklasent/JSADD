@@ -93,13 +93,11 @@ function checkTrigBreak() {
     };
     window.postMessage(msg);
 
-    return undefined; // Checked by background script.
+    return undefined; // Checked by background.js
 };
 
 function checkConClear() {
-    var detected = true;
-
-    return detected;
+    return undefined; // Checked by modifyConsole.js
 };
 
 function checkModBuilt() {
