@@ -1,6 +1,6 @@
-var siteADTs = [];
-
 (async () => {
+    var siteADTs = [];
+
     // Obtain tab ID.
     const tab = await chrome.runtime.sendMessage({ req: "tabId" });
     const tabIdentifier = tab.tabId;
@@ -10,9 +10,9 @@ var siteADTs = [];
     port.onMessage.addListener(function(msg) {
         if (!siteADTs.includes(msg.adt)) {
             siteADTs.push(msg.adt);
-            updateStorage(siteADTs);
-            chrome.runtime.sendMessage({ req: "badgeUpdate" });
         }
+        updateStorage(siteADTs);
+        chrome.runtime.sendMessage({ req: "badgeUpdate" });
     });
 
     // Communication with other content scripts.
@@ -22,10 +22,10 @@ var siteADTs = [];
             for (adt of msg.data.data) {
                 if (!siteADTs.includes(adt)) {
                     siteADTs.push(adt);
-                    updateStorage(siteADTs);
-                    chrome.runtime.sendMessage({ req: "badgeUpdate" });
                 }
             }
+            updateStorage(siteADTs);
+            chrome.runtime.sendMessage({ req: "badgeUpdate" });
         }
         // Forward ADT check requests to background.
         else {

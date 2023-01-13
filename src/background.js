@@ -7,6 +7,8 @@ chrome.runtime.onStartup.addListener(() => {
     scriptidentifier = 0;
     portTabMap = {};
     callFrameIDsTabMap = {};
+    chrome.storage.local.clear();
+    chrome.storage.sync.clear();
 });
 
 // Get extension badge of the current tab.
