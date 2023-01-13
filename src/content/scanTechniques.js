@@ -94,27 +94,27 @@ function checkTrigBreak() {
     };
     window.postMessage(msg);
 
-    return undefined; // Checked by background.js
+    return false; // Checked by background.js
 };
 
 function checkConClear() {
-    return undefined; // Checked by modifyConsole.js
+    return false; // Checked by modifyConsole.js
 };
 
 function checkModBuilt() {
-    var detected = true;
+    var detected = false;
 
     return detected;   
 }
 
 function checkWidthDiff() {
-    var detected = true;
+    var detected = false;
 
     return detected;
 };
 
 function checkLogGet() {
-    var detected = true;
+    var detected = false;
 
     return detected;
 };
