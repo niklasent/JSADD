@@ -9,10 +9,19 @@ chrome.runtime.onStartup.addListener(() => {
     callFrameIDsTabMap = {};
 });
 
-// Tell content scripts the tab ID whenever requested.
+// Get extension badge of the current tab.
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    updateBadge(activeInfo.tabId);
+});
+
+// Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    // Tell content scripts the tab ID whenever requested.
     if (msg.req === "tabId") {
         sendResponse({tabId: sender.tab.id});
+    }
+    else if (msg.req === "badgeUpdate") {
+        updateBadge(sender.tab.id);
     }
 });
 
@@ -48,13 +57,13 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
     // Register content scripts.
     chrome.scripting.registerContentScripts([{
         id: scriptidentifier.toString() + "_modifyEventTargets",
-        matches: ["<all_urls>"],
+        matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/modifyEventTargets.js'],
         world: 'MAIN',
         runAt: "document_start"
     }, {
         id: scriptidentifier.toString() + "_modifyConsole",
-        matches: ["<all_urls>"],
+        matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/modifyConsole.js'],
         world: 'MAIN',
         runAt: "document_start"
@@ -67,7 +76,7 @@ chrome.webNavigation.onCompleted.addListener((tab) => {
     // Register content scripts.
     chrome.scripting.registerContentScripts([{
         id: scriptidentifier.toString() + "_scanTechniques",
-        matches: ["<all_urls>"],
+        matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/scanTechniques.js'],
         world: 'MAIN'
     }]);
@@ -96,4 +105,21 @@ function checkTrigBreak(tabId) {
     setTimeout(() => {
         chrome.debugger.detach({ tabId: tabId });
     }, 2000);
+}
+
+/* Functions for message handling */
+function updateBadge(tabId) {
+    chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
+        if (response) {
+            if (response.count === 0) chrome.action.setBadgeBackgroundColor({color: 'green'});
+            else if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow'});
+            else chrome.action.setBadgeBackgroundColor({color: 'red'});
+            chrome.action.setBadgeText({text: response.count.toString()});
+        }
+        else if (chrome.runtime.lastError) {
+            chrome.action.setBadgeBackgroundColor({color: 'blue'});
+            chrome.action.setBadgeText({text: "?"});
+        }
+        return true;
+    });
 }

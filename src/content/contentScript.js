@@ -1,6 +1,6 @@
-(async () => {
-    var siteADTs = [];
+var siteADTs = [];
 
+(async () => {
     // Obtain tab ID.
     const tab = await chrome.runtime.sendMessage({ req: "tabId" });
     const tabIdentifier = tab.tabId;
@@ -11,10 +11,11 @@
         if (!siteADTs.includes(msg.adt)) {
             siteADTs.push(msg.adt);
             updateStorage(siteADTs);
+            chrome.runtime.sendMessage({ req: "badgeUpdate" });
         }
     });
 
-    // Communication with other content scritps.
+    // Communication with other content scripts.
     window.onmessage = (msg) => {
         // Update storage for reported ADTs.
         if (msg.data.req === "ADT") {
@@ -22,6 +23,7 @@
                 if (!siteADTs.includes(adt)) {
                     siteADTs.push(adt);
                     updateStorage(siteADTs);
+                    chrome.runtime.sendMessage({ req: "badgeUpdate" });
                 }
             }
         }
@@ -31,6 +33,13 @@
             port.postMessage({req: adt, tabId: tabIdentifier});
         }
     };
+    
+    // Communication with background script.
+    chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+        if(msg.req === "badge") {
+            sendResponse({count: siteADTs.length});
+        };
+    });
 })();
 
 function updateStorage(data) {
