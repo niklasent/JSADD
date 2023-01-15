@@ -58,31 +58,35 @@ chrome.runtime.onConnect.addListener(function(port) {
 chrome.webNavigation.onCommitted.addListener((tab) => {
     // Register content scripts.
     chrome.scripting.registerContentScripts([{
-        id: scriptidentifier.toString() + "_modifyEventTargets",
+        id: (scriptidentifier++).toString() + "_modifyEventTargets",
         matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/modifyEventTargets.js'],
         world: 'MAIN',
         runAt: "document_start"
     }, {
-        id: scriptidentifier.toString() + "_modifyConsole",
+        id: (scriptidentifier++).toString() + "_modifyConsole",
         matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/modifyConsole.js'],
         world: 'MAIN',
         runAt: "document_start"
+    }, {
+        id: (scriptidentifier++).toString() + "_builtinWrapper",
+        matches: ["http://*/*", "https://*/*"],
+        js: ['./src/content/builtinWrapper.js'],
+        world: 'MAIN',
+        runAt: "document_start"
     }]);
-    scriptidentifier++;
 });
 
 // Start scripts that need to be executed AFTER page load.
 chrome.webNavigation.onCompleted.addListener((tab) => {
     // Register content scripts.
     chrome.scripting.registerContentScripts([{
-        id: scriptidentifier.toString() + "_scanTechniques",
+        id: (scriptidentifier++).toString() + "_scanTechniques",
         matches: ["http://*/*", "https://*/*"],
         js: ['./src/content/scanTechniques.js'],
         world: 'MAIN'
     }]);
-    scriptidentifier++;
 });
 
 /* Functions for ADT detection */

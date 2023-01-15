@@ -102,9 +102,7 @@ function checkConClear() {
 };
 
 function checkModBuilt() {
-    var detected = false;
-
-    return detected;   
+    return false; // Check by builtinWrapper.js   
 }
 
 function checkWidthDiff() {
