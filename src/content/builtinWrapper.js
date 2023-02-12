@@ -1,7 +1,6 @@
 (() => {
     // Use JS Proxies for ModBuilt.
     const modbuiltHandler = {
-        // TODO: Detect function modification and postMessage if detected.
         set(target, prop, receiver) {
             if (typeof receiver === 'function') {
                 var msg = {

@@ -75,6 +75,12 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
         js: ['./src/content/builtinWrapper.js'],
         world: 'MAIN',
         runAt: "document_start"
+    }, {
+        id: (scriptidentifier++).toString() + "_monitorWindow",
+        matches: ["http://*/*", "https://*/*"],
+        js: ['./src/content/monitorWindow.js'],
+        world: 'MAIN',
+        runAt: "document_start"
     }]);
 });
 
