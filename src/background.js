@@ -11,10 +11,15 @@ chrome.runtime.onStartup.addListener(() => {
     chrome.storage.sync.clear();
 });
 
-// Get extension badge of the current tab.
+// Get extension badge of the current tab after tab activation and update.
 chrome.tabs.onActivated.addListener((activeInfo) => {
     updateBadge(activeInfo.tabId);
 });
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (changeInfo.status === "complete") updateBadge(tabId);
+});
+
 
 // Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
