@@ -127,21 +127,22 @@ function checkTrigBreak(tabId) {
 /* Functions for message handling */
 function updateBadge(tabId) {
     chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
+        console.log(response);
         if (response) {
             if (response.count === 0) {
-                chrome.action.setBadgeBackgroundColor({color: 'green'});
+                chrome.action.setBadgeBackgroundColor({color: 'green', tabId: tabId});
                 chrome.action.setIcon({path: '../assets/icons/benign_16.png', tabId: tabId});
             }
             else {
-                if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow'});
-                else chrome.action.setBadgeBackgroundColor({color: 'red'});
+                if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow', tabId: tabId});
+                else chrome.action.setBadgeBackgroundColor({color: 'red', tabId: tabId});
                 chrome.action.setIcon({path: '../assets/icons/malicious_16.png', tabId: tabId});
             }
-            chrome.action.setBadgeText({text: response.count.toString()});
+            chrome.action.setBadgeText({text: response.count.toString(), tabId: tabId});
         }
         else if (chrome.runtime.lastError) {
-            chrome.action.setBadgeBackgroundColor({color: 'blue'});
-            chrome.action.setBadgeText({text: "?"});
+            chrome.action.setBadgeBackgroundColor({color: 'blue', tabId: tabId});
+            chrome.action.setBadgeText({text: "?", tabId: tabId});
         }
         return true;
     });
