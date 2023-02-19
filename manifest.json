@@ -28,5 +28,6 @@
         "default_title": "JSADD",
         "default_popup": "./src/popup/popup.html"
     },
+    "options_page": "./src/options/options.html",
     "manifest_version": 3
 }
