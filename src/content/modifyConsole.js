@@ -49,7 +49,8 @@
                         }
                     }
                 });
-                originalConsoleFunction.apply(console, args);
+                try {originalConsoleFunction.apply(console, args);}
+                catch(e){}
             }
         };
     };

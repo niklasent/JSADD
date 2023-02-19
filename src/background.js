@@ -123,9 +123,15 @@ function checkTrigBreak(tabId) {
 function updateBadge(tabId) {
     chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
         if (response) {
-            if (response.count === 0) chrome.action.setBadgeBackgroundColor({color: 'green'});
-            else if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow'});
-            else chrome.action.setBadgeBackgroundColor({color: 'red'});
+            if (response.count === 0) {
+                chrome.action.setBadgeBackgroundColor({color: 'green'});
+                chrome.action.setIcon({path: '../assets/icons/benign_16.png', tabId: tabId});
+            }
+            else {
+                if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow'});
+                else chrome.action.setBadgeBackgroundColor({color: 'red'});
+                chrome.action.setIcon({path: '../assets/icons/malicious_16.png', tabId: tabId});
+            }
             chrome.action.setBadgeText({text: response.count.toString()});
         }
         else if (chrome.runtime.lastError) {
