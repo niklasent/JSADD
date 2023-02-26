@@ -1,0 +1,12 @@
+.flex-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 2.5%;
+    height: 5em;
+}
+
+#status {
+    margin-left: 2.5%;
+    font-size: 2.5em;
+}

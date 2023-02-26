@@ -11,15 +11,13 @@ chrome.runtime.onStartup.addListener(() => {
     chrome.storage.sync.clear();
 });
 
-// Get extension badge of the current tab after tab activation and update.
+// Update extension badge of the current tab after tab activation and update.
 chrome.tabs.onActivated.addListener((activeInfo) => {
     updateBadge(activeInfo.tabId);
 });
-
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
     if (changeInfo.status === "complete") updateBadge(tabId);
 });
-
 
 // Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
@@ -27,6 +25,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     if (msg.req === "tabId") {
         sendResponse({tabId: sender.tab.id});
     }
+    // Update badge whenever requested.
     else if (msg.req === "badgeUpdate") {
         updateBadge(sender.tab.id);
     }
@@ -47,14 +46,14 @@ chrome.debugger.onEvent.addListener((src, method, params) => {
     }
 });
 
-
 // Set up long-lived connection.
-chrome.runtime.onConnect.addListener(function(port) {
+chrome.runtime.onConnect.addListener(async function(port) {
     console.assert(port.name === "adt_background_check");
-    port.onMessage.addListener(function(msg) {
+    port.onMessage.addListener(async function(msg) {
         portTabMap[msg.tabId] = port;
         if (msg.req === "trigbreak") {
-            checkTrigBreak(msg.tabId);
+            var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;
+            if (!debuggerDisabled) checkTrigBreak(msg.tabId);
         }
     });
 });
@@ -125,10 +124,13 @@ function checkTrigBreak(tabId) {
 }
 
 /* Functions for message handling */
-function updateBadge(tabId) {
+async function updateBadge(tabId) {
+    var badgeText = "";
+    var showBadge = (await chrome.storage.sync.get({ showBadge: false })).showBadge;
     chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
-        console.log(response);
         if (response) {
+            if (showBadge) badgeText = response.count.toString();
+            chrome.action.setBadgeText({text: badgeText, tabId: tabId});
             if (response.count === 0) {
                 chrome.action.setBadgeBackgroundColor({color: 'green', tabId: tabId});
                 chrome.action.setIcon({path: '../assets/icons/benign_16.png', tabId: tabId});
@@ -138,11 +140,11 @@ function updateBadge(tabId) {
                 else chrome.action.setBadgeBackgroundColor({color: 'red', tabId: tabId});
                 chrome.action.setIcon({path: '../assets/icons/malicious_16.png', tabId: tabId});
             }
-            chrome.action.setBadgeText({text: response.count.toString(), tabId: tabId});
         }
         else if (chrome.runtime.lastError) {
+            if (showBadge) badgeText = "?";
+            chrome.action.setBadgeText({text: badgeText, tabId: tabId});
             chrome.action.setBadgeBackgroundColor({color: 'blue', tabId: tabId});
-            chrome.action.setBadgeText({text: "?", tabId: tabId});
         }
         return true;
     });

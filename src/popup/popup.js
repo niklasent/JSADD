@@ -47,11 +47,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             let referenceLink = document.createElement('a');
             referenceLink.href = adt.link;
             referenceLink.textContent = "[Learn more]";
-            // TODO: ...
             listElement.appendChild(headline);
             listElement.appendChild(description);
             listElement.appendChild(referenceLink);
             categoryList.appendChild(listElement);
         }
     });
+
+    // Remove alteration list when disabled by settings.
+    var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;
+    if (debuggerDisabled) document.getElementById("category-alteration").remove();
 });

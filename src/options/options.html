@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My Test Extension Options</title>
+        <link href="options.css" rel="stylesheet" type="text/css" />
+        <title>JSADD Settings</title>
     </head>
     <body>
-        <label>
-        <input type="checkbox" id="badge">
-        Show badge
-        </label>
+        <h1>JSADD Settings</h1>
+        <h2>Appearance</h2>
+        <input type="checkbox" id="showBadge">
+        <label for="showBadge">Show badge.</label><br/>
+        <h2>Advanced Settings</h2>
+        <input type="checkbox" id="noDebugger">
+        <label for="noDebugger">Prevent JSADD from attaching custom debuggers. Deactivates alteration detection.</label><br/>
 
-        <br/>
-        <button id="save">Save</button>
-        <div id="status"></div>
+        <div class="flex-container">
+            <button id="save">Save</button>
+            <div id="status"></div>
+        </div>
 
         <script src="options.js"></script>
     </body>
