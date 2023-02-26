@@ -1,6 +1,7 @@
 // Constants
 const referenceLinks = {
-    "musch": "https://www.usenix.org/conference/usenixsecurity21/presentation/musch"
+    "musch": "https://www.usenix.org/conference/usenixsecurity21/presentation/musch",
+    "sorhus": "https://github.com/sindresorhus/devtools-detect"
 }
 
 export const antiDebuggingTechniques = {
@@ -51,6 +52,14 @@ export const antiDebuggingTechniques = {
         "type": "detection",
         "desc": "The website might try to detect opened developer tools by logging specifically crafted objects.",
         "link": referenceLinks.musch
+    },
+    "firebug": {
+        "name": "Firebug Lite (Chrome)",
+        "auth": "Sorhus",
+        "year": "2013",
+        "type": "detection",
+        "desc": "The website might try to detect the use of Firebug Lite.",
+        "link": referenceLinks.sorhus
     }
 }
 

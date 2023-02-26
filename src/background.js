@@ -85,6 +85,12 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
         js: ['./src/content/monitorWindow.js'],
         world: 'MAIN',
         runAt: "document_start"
+    }, {
+        id: (scriptidentifier++).toString() + "_monitorFirebug",
+        matches: ["http://*/*", "https://*/*"],
+        js: ['./src/content/monitorFirebug.js'],
+        world: 'MAIN',
+        runAt: "document_end"
     }]);
 });
 
