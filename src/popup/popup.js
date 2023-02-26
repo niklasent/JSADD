@@ -44,11 +44,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             headline.innerText = adt.name;
             let description = document.createElement('p')
             description.innerText = adt.desc;
+            let author = document.createElement('p');
+            author.innerText = adt.auth + ", " + adt.year;
+            author.style.fontStyle = 'italic';
             let referenceLink = document.createElement('a');
             referenceLink.href = adt.link;
             referenceLink.textContent = "[Learn more]";
             listElement.appendChild(headline);
             listElement.appendChild(description);
+            listElement.appendChild(author);
             listElement.appendChild(referenceLink);
             categoryList.appendChild(listElement);
         }
