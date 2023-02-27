@@ -4,7 +4,8 @@ const antiDebuggingTechniqueChecks = {
     "conclear": checkConClear,
     "modbuilt": checkModBuilt,
     "widthdiff": checkWidthDiff,
-    "logget": checkLogGet
+    "logget": checkLogGet,
+    "firebug": checkFirebug
 };
 
 (() => {
@@ -102,20 +103,20 @@ function checkConClear() {
 };
 
 function checkModBuilt() {
-    return false; // Check by builtinWrapper.js   
+    return false; // Checked by builtinWrapper.js   
 }
 
 function checkWidthDiff() {
-    var detected = false;
-
-    return detected;
+    return false; // Checked by monitorWindow.js
 };
 
 function checkLogGet() {
-    var detected = false;
-
-    return detected;
+    return false; // Checked by modifyConsole.js
 };
+
+function checkFirebug() {
+    return false; // Checked by monitorFirebug.js
+}
 
 /* Helper functions */
 // Source: https://www.sqlpac.com/en/documents/javascript-listing-active-event-listeners.html
