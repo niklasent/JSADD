@@ -60,49 +60,53 @@ chrome.runtime.onConnect.addListener(async function(port) {
 
 // Start scripts that need to be executed BEFORE page load.
 chrome.webNavigation.onCommitted.addListener((tab) => {
-    // Register content scripts.
-    chrome.scripting.registerContentScripts([{
-        id: (scriptidentifier++).toString() + "_modifyEventTargets",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/modifyEventTargets.js'],
-        world: 'MAIN',
-        runAt: "document_start"
-    }, {
-        id: (scriptidentifier++).toString() + "_modifyConsole",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/modifyConsole.js'],
-        world: 'MAIN',
-        runAt: "document_start"
-    }, {
-        id: (scriptidentifier++).toString() + "_builtinWrapper",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/builtinWrapper.js'],
-        world: 'MAIN',
-        runAt: "document_start"
-    }, {
-        id: (scriptidentifier++).toString() + "_monitorWindow",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/monitorWindow.js'],
-        world: 'MAIN',
-        runAt: "document_start"
-    }, {
-        id: (scriptidentifier++).toString() + "_monitorFirebug",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/monitorFirebug.js'],
-        world: 'MAIN',
-        runAt: "document_end"
-    }]);
+    if (tab.frameId === 0) {
+        // Register content scripts.
+        chrome.scripting.registerContentScripts([{
+            id: (scriptidentifier++).toString() + "_modifyEventTargets",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/modifyEventTargets.js'],
+            world: 'MAIN',
+            runAt: "document_start"
+        }, {
+            id: (scriptidentifier++).toString() + "_modifyConsole",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/modifyConsole.js'],
+            world: 'MAIN',
+            runAt: "document_start"
+        }, {
+            id: (scriptidentifier++).toString() + "_builtinWrapper",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/builtinWrapper.js'],
+            world: 'MAIN',
+            runAt: "document_start"
+        }, {
+            id: (scriptidentifier++).toString() + "_monitorWindow",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/monitorWindow.js'],
+            world: 'MAIN',
+            runAt: "document_start"
+        }, {
+            id: (scriptidentifier++).toString() + "_monitorFirebug",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/monitorFirebug.js'],
+            world: 'MAIN',
+            runAt: "document_end"
+        }]);
+    }
 });
 
 // Start scripts that need to be executed AFTER page load.
 chrome.webNavigation.onCompleted.addListener((tab) => {
-    // Register content scripts.
-    chrome.scripting.registerContentScripts([{
-        id: (scriptidentifier++).toString() + "_scanTechniques",
-        matches: ["http://*/*", "https://*/*"],
-        js: ['./src/content/scanTechniques.js'],
-        world: 'MAIN'
-    }]);
+    if (tab.frameId === 0) {
+        // Register content scripts.
+        chrome.scripting.registerContentScripts([{
+            id: (scriptidentifier++).toString() + "_scanTechniques",
+            matches: ["http://*/*", "https://*/*"],
+            js: ['./src/content/scanTechniques.js'],
+            world: 'MAIN'
+        }]);
+    }
 });
 
 /* Functions for ADT detection */
