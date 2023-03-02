@@ -113,12 +113,12 @@ chrome.webNavigation.onCompleted.addListener((tab) => {
 function checkTrigBreak(tabId) {
     // Attach and enable debugger.
     chrome.debugger.attach({ tabId: tabId }, "1.3", () => {
-        console.log("Attaching...", tabId);
+        // console.log("Attaching...", tabId);
         if (chrome.runtime.lastError) {
             console.log('runtime.lastError', tabId, chrome.runtime.lastError.message);
             return;
         }
-        console.log("Debugger attached", tabId);
+        // console.log("Debugger attached", tabId);
         chrome.debugger.sendCommand({
             tabId: tabId
         }, "Debugger.enable", {}, (result) => {
