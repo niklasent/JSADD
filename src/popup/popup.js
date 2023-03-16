@@ -1,6 +1,8 @@
 import { antiDebuggingTechniques, getActiveTabURL } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("img-options").onclick = () => { chrome.runtime.openOptionsPage() };
+
     // Determine maximum number of entries per category.
     let maxCategoryEntries = {};
     var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;

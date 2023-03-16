@@ -44,7 +44,7 @@
     padding-right: 5px;
 }
 
-.category-list > li > details > ul > li{
+.category-list > li > details > ul > li {
     background-color: lightpink;
     margin: 5px;
     border: 1px solid;
@@ -53,6 +53,12 @@
     padding: 5px;
 }
 
-.category-list > li > details > ul > li > h1{
+.category-list > li > details > ul > li > h1 {
     font-size: small;
+}
+
+#img-options {
+    width: 10%;
+    height: 10%;
+    margin: 5px;
 }

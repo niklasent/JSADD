@@ -10,7 +10,7 @@ function save_options() {
     chrome.runtime.sendMessage({ req: "badgeUpdate" });
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
-    status.innerHTML = "&check;";
+    status.innerHTML = "Saved! &check;";
     setTimeout(function() {
       status.textContent = '';
     }, 3000);

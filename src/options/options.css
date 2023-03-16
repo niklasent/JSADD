@@ -1,3 +1,7 @@
+h1 {
+    text-decoration: underline;
+}
+
 .flex-container {
     display: flex;
     justify-content: flex-start;
