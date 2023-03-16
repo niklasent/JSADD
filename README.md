@@ -1,8 +1,8 @@
 # JSADD - JavaScript Anti-Debugging Detection Tool
 
-![unknown](./assets/icons/benign_128.png)
-![unknown](./assets/icons/jsadd_128.png)
-![unknown](./assets/icons/malicious_128.png)
+![](./assets/icons/benign_128.png)
+![](./assets/icons/jsadd_128.png)
+![](./assets/icons/malicious_128.png)
 
 ## About
 JSADD is a browser extension which detects common techniques implemented by websites that aim to impede, alter or detect debugging attempts using the integrated Developer Tools.
