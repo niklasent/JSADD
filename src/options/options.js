@@ -2,9 +2,11 @@
 function save_options() {
   var showBadge = document.getElementById('showBadge').checked;
   var noDebugger = document.getElementById('noDebugger').checked;
+  var darkMode = document.getElementById('darkMode').checked;
   chrome.storage.sync.set({
     showBadge: showBadge,
-    noDebugger: noDebugger
+    noDebugger: noDebugger,
+    darkMode: darkMode
   }, function() {
     // Call update procedures.
     chrome.runtime.sendMessage({ req: "badgeUpdate" });
@@ -21,10 +23,12 @@ function save_options() {
 function restore_options() {
   chrome.storage.sync.get({
     showBadge: true,
-    noDebugger: false
+    noDebugger: false,
+    darkMode: false
   }, function(options) {
     document.getElementById('showBadge').checked = options.showBadge;
     document.getElementById('noDebugger').checked = options.noDebugger;
+    document.getElementById('darkMode').checked = options.darkMode;
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);

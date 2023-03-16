@@ -29,10 +29,12 @@
 
 .category-list > li > details > summary > .category-description {
     align-self: flex-start;
+    background-color: greenyellow;
     padding-left: 5px;
 }
 
 .category-list > li > details > summary > .category-count {
+    background-color: greenyellow;
     align-self: flex-end;
     margin-left: auto;
     padding-right: 10px;

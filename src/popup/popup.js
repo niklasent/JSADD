@@ -3,6 +3,19 @@ import { antiDebuggingTechniques, getActiveTabURL } from "./utils.js";
 document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("img-options").onclick = () => { chrome.runtime.openOptionsPage() };
 
+    // Change appearance to dark mode when enabled.
+    var darkMode = (await chrome.storage.sync.get({ darkMode: false })).darkMode;
+    if (darkMode) {
+        var link = document.createElement('link');
+        link.href = "./popup-dark.css";
+        link.rel = "stylesheet";
+        link.type = "text/css";
+
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+        document.getElementById("img-options").src = "./img/gear-white.png"
+    }
+
     // Determine maximum number of entries per category.
     let maxCategoryEntries = {};
     var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;
