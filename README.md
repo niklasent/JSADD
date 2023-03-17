@@ -10,12 +10,12 @@ JSADD is a browser extension which detects common techniques implemented by webs
 ## Supported anti-debugging techniques
 JSADD supports the detection of the following anti-debugging techniques:
 - ShortCut (Impediment) [[1]](#1)
-- TrigBreak (Impediment) [[1]](#1)
+- TrigBreak (Impediment) (Chrome only) [[1]](#1)
 - ConClear (Impediment) [[1]](#1)
 - ModBuilt (Alteration) [[1]](#1)
 - WidthDiff (Detection) [[1]](#1)
 - LogGet (Detection) [[1]](#1)
-- Firebug Lite (Detection) (Chrome) [[2]](#2)
+- Firebug Lite (Detection) (Chrome only) [[2]](#2)
 
 ## Currently supported browsers
 - Chromium-based browsers (e.g. Google Chrome)
