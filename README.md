@@ -1,8 +1,8 @@
 # JSADD - JavaScript Anti-Debugging Detection Tool
 
-![](./assets/icons/benign_128.png)
-![](./assets/icons/jsadd_128.png)
-![](./assets/icons/malicious_128.png)
+![](./platforms/chrome/assets/icons/benign_128.png)
+![](./platforms/chrome/assets/icons/jsadd_128.png)
+![](./platforms/chrome/assets/icons/malicious_128.png)
 
 ## About
 JSADD is a browser extension which detects common techniques implemented by websites that aim to impede, alter or detect debugging attempts using the integrated Developer Tools.
@@ -10,7 +10,7 @@ JSADD is a browser extension which detects common techniques implemented by webs
 ## Supported anti-debugging techniques
 JSADD supports the detection of the following anti-debugging techniques:
 - ShortCut (Impediment) [[1]](#1)
-- TrigBreak (Impediment) (Chrome only) [[1]](#1)
+- TrigBreak (Impediment) (Chromium only) [[1]](#1)
 - ConClear (Impediment) [[1]](#1)
 - ModBuilt (Alteration) [[1]](#1)
 - WidthDiff (Detection) [[1]](#1)
@@ -19,6 +19,8 @@ JSADD supports the detection of the following anti-debugging techniques:
 
 ## Currently supported browsers
 - Chromium-based browsers (e.g. Google Chrome)
+
+Due to the [lack of support](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/ExecutionWorld) for the execution world *MAIN* of the scripting API in Firefox, JSADD is not supported for this browser yet.
 
 ## References
 <a id="1">[1]</a>
