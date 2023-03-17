@@ -46,8 +46,11 @@
     padding-right: 5px;
 }
 
-.category-list > li > details > ul > li {
+.category-list > li > details > ul  * {
     background-color: lightpink;
+}
+
+.category-list > li > details > ul > li {
     margin: 5px;
     border: 1px solid;
     border-color: gray;

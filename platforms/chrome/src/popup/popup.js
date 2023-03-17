@@ -50,8 +50,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let categorySummaryElement = document.getElementById(adt.type + "-sum");
                 categorySummaryElement.style.backgroundColor = "red";
                 categorySummaryElement.style.color = "white";
-                // Show total number of entries per category.
                 let categoryCountElement = document.getElementById(adt.type + "-count");
+                categoryCountElement.style.backgroundColor = "red";
+                let categoryDescElement = document.getElementById(adt.type + "-desc");
+                categoryDescElement.style.backgroundColor = "red";
+                // Show total number of entries per category.
                 let categoryCountString = categoryCountElement.innerText;
                 let categoryCount = parseInt(categoryCountString.substring(0, categoryCountString.indexOf('/'))) + 1;
                 categoryCountString = categoryCount.toString() + categoryCountString.substring(categoryCountString.indexOf('/'))

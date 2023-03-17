@@ -136,7 +136,7 @@ function checkTrigBreak(tabId) {
 /* Functions for message handling */
 async function updateBadge(tabId) {
     var badgeText = "";
-    var showBadge = (await chrome.storage.sync.get({ showBadge: false })).showBadge;
+    var showBadge = (await chrome.storage.sync.get({ showBadge: true })).showBadge;
     chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
         if (response) {
             if (showBadge) badgeText = response.count.toString();
