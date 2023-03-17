@@ -1,0 +1,4 @@
+# Unused assets (Chrome)
+platforms/chrome/assets/icons/unused/*
+# Unused assets (Firefox)
+platforms/firefox/assets/icons/unused/*

@@ -21,7 +21,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 
 // Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    // Tell content scripts the tab ID whenever requested.
+    // Respond the tab ID whenever requested.
     if (msg.req === "tabId") {
         sendResponse({tabId: sender.tab.id});
     }
@@ -46,7 +46,7 @@ chrome.debugger.onEvent.addListener((src, method, params) => {
     }
 });
 
-// Set up long-lived connection.
+// Set up long-lived connection for ADT background check.
 chrome.runtime.onConnect.addListener(async function(port) {
     console.assert(port.name === "adt_background_check");
     port.onMessage.addListener(async function(msg) {
@@ -58,7 +58,7 @@ chrome.runtime.onConnect.addListener(async function(port) {
     });
 });
 
-// Start scripts that need to be executed BEFORE page load.
+// Register content scripts before page load.
 chrome.webNavigation.onCommitted.addListener((tab) => {
     if (tab.frameId === 0) {
         // Register content scripts.
@@ -96,7 +96,7 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
     }
 });
 
-// Start scripts that need to be executed AFTER page load.
+// Register content scripts after page load.
 chrome.webNavigation.onCompleted.addListener((tab) => {
     if (tab.frameId === 0) {
         // Register content scripts.
