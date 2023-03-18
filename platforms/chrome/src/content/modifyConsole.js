@@ -26,7 +26,6 @@
 
     for (let key in console) {
         if (typeof console[key] === "function" && !(EXCLUDED_FUNCTIONS.includes(key))) {
-            console.log(key);
             var originalConsoleFunction = console[key];
             console[key] = function(...args) {
                 args.forEach((argument) => {
