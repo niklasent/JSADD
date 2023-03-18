@@ -1,5 +1,5 @@
 {
-    "name": "JSADD - JavaScript Anti-Debugging Detection Tool",
+    "name": "JSADD - JavaScript Anti-Debugging Detection",
     "version": "0.0.0.1",
     "description": "Detects the presence of common anti-debugging techniques implemented in a website.",
     "author": "Niklas Entschladen",
