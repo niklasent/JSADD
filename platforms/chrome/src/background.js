@@ -1,3 +1,4 @@
+var enabled = true;
 var scriptidentifier = 0;
 var portTabMap = {};
 var callFrameIDsTabMap = {};
@@ -21,46 +22,57 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 
 // Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    // Respond the tab ID whenever requested.
-    if (msg.req === "tabId") {
-        sendResponse({tabId: sender.tab.id});
-    }
-    // Update badge whenever requested.
-    else if (msg.req === "badgeUpdate") {
-        updateBadge(sender.tab.id);
+    if (enabled) {
+        // Respond the tab ID whenever requested.
+        if (msg.req === "tabId") {
+            sendResponse({tabId: sender.tab.id});
+        }
+        // Update badge whenever requested.
+        else if (msg.req === "badgeUpdate") {
+            updateBadge(sender.tab.id);
+        }
     }
 });
 
 // Register event listener for triggered breakpoints.
 chrome.debugger.onEvent.addListener((src, method, params) => {
-    if (method === "Debugger.paused") {
-        for (const callFrame of params.callFrames) {
-            if (!callFrameIDsTabMap[src.tabId]) callFrameIDsTabMap[src.tabId] = [];
-            if (callFrameIDsTabMap[src.tabId].includes(callFrame.callFrameId)) {
-                portTabMap[src.tabId].postMessage({adt: "trigbreak"});
-                return;
+    if (enabled) {
+        if (method === "Debugger.paused") {
+            for (const callFrame of params.callFrames) {
+                if (!callFrameIDsTabMap[src.tabId]) callFrameIDsTabMap[src.tabId] = [];
+                if (callFrameIDsTabMap[src.tabId].includes(callFrame.callFrameId)) {
+                    portTabMap[src.tabId].postMessage({adt: "trigbreak"});
+                    return;
+                }
+                else (callFrameIDsTabMap[src.tabId].push(callFrame.callFrameId));
             }
-            else (callFrameIDsTabMap[src.tabId].push(callFrame.callFrameId));
+            chrome.debugger.sendCommand(src, "Debugger.resume");
         }
-        chrome.debugger.sendCommand(src, "Debugger.resume");
     }
 });
 
 // Set up long-lived connection for ADT background check.
 chrome.runtime.onConnect.addListener(async function(port) {
-    console.assert(port.name === "adt_background_check");
-    port.onMessage.addListener(async function(msg) {
-        portTabMap[msg.tabId] = port;
-        if (msg.req === "trigbreak") {
-            var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;
-            if (!debuggerDisabled) checkTrigBreak(msg.tabId);
-        }
-    });
+    if (port.name === "adt_background_check") {
+        port.onMessage.addListener(async function(msg) {
+            portTabMap[msg.tabId] = port;
+            if (msg.req === "trigbreak") {
+                var debuggerDisabled = (await chrome.storage.sync.get({ noDebugger: false })).noDebugger;
+                if (!debuggerDisabled) checkTrigBreak(msg.tabId);
+            }
+        });
+    }
+    else if (port.name === "popup_port") {
+        port.onMessage.addListener(async function(msg) {
+            enabled = msg.state;
+            await updateBadge(msg.tabId);
+        });
+    }
 });
 
 // Register content scripts before page load.
 chrome.webNavigation.onCommitted.addListener((tab) => {
-    if (tab.frameId === 0) {
+    if (tab.frameId === 0 && enabled) {
         // Register content scripts.
         chrome.scripting.registerContentScripts([{
             id: (scriptidentifier++).toString() + "_modifyEventTargets",
@@ -98,7 +110,7 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
 
 // Register content scripts after page load.
 chrome.webNavigation.onCompleted.addListener((tab) => {
-    if (tab.frameId === 0) {
+    if (tab.frameId === 0 && enabled) {
         // Register content scripts.
         chrome.scripting.registerContentScripts([{
             id: (scriptidentifier++).toString() + "_scanTechniques",
@@ -137,25 +149,32 @@ function checkTrigBreak(tabId) {
 async function updateBadge(tabId) {
     var badgeText = "";
     var showBadge = (await chrome.storage.sync.get({ showBadge: true })).showBadge;
-    chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
-        if (response) {
-            if (showBadge) badgeText = response.count.toString();
-            chrome.action.setBadgeText({text: badgeText, tabId: tabId});
-            if (response.count === 0) {
-                chrome.action.setBadgeBackgroundColor({color: 'green', tabId: tabId});
-                chrome.action.setIcon({path: '../assets/icons/benign_16.png', tabId: tabId});
+    enabled = (await chrome.storage.sync.get({ enabled: true })).enabled;
+    if (enabled) {
+        chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
+            if (response) {
+                if (showBadge) badgeText = response.count.toString();
+                chrome.action.setBadgeText({text: badgeText, tabId: tabId});
+                if (response.count === 0) {
+                    chrome.action.setBadgeBackgroundColor({color: 'green', tabId: tabId});
+                    chrome.action.setIcon({path: '../assets/icons/benign_16.png', tabId: tabId});
+                }
+                else {
+                    if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow', tabId: tabId});
+                    else chrome.action.setBadgeBackgroundColor({color: 'red', tabId: tabId});
+                    chrome.action.setIcon({path: '../assets/icons/malicious_16.png', tabId: tabId});
+                }
             }
-            else {
-                if (response.count === 1) chrome.action.setBadgeBackgroundColor({color: 'yellow', tabId: tabId});
-                else chrome.action.setBadgeBackgroundColor({color: 'red', tabId: tabId});
-                chrome.action.setIcon({path: '../assets/icons/malicious_16.png', tabId: tabId});
+            else if (chrome.runtime.lastError) {
+                if (showBadge) badgeText = "?";
+                chrome.action.setBadgeText({text: badgeText, tabId: tabId});
+                chrome.action.setBadgeBackgroundColor({color: 'blue', tabId: tabId});
             }
-        }
-        else if (chrome.runtime.lastError) {
-            if (showBadge) badgeText = "?";
-            chrome.action.setBadgeText({text: badgeText, tabId: tabId});
-            chrome.action.setBadgeBackgroundColor({color: 'blue', tabId: tabId});
-        }
-        return true;
-    });
+            return true;
+        });
+    }
+    else {
+        chrome.action.setBadgeText({text: badgeText, tabId: tabId});
+        chrome.action.setIcon({path: '../assets/icons/jsadd_16.png', tabId: tabId});
+    }
 }

@@ -2,14 +2,14 @@
     background-color: dimgray;
 }
 
-.title {
+#title {
     color: #e8e8e8;
 }
 
-.category-list > li > details > summary {
+#category-list > li > details > summary {
     border-color: #e8e8e8;
 }
 
-.category-list > li > details > ul > li {
+#category-list > li > details > ul > li {
     border-color: #e8e8e8;
 }
