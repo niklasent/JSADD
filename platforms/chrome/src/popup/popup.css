@@ -73,6 +73,7 @@
 
 #img-options {
     display: block;
+    float: right;
     width: 35%;
     height: 35%;
     margin-left: 5px;
@@ -80,7 +81,6 @@
 
 #img-switch {
     display: block;
-    float: right;
     width: 35%;
     height: 35%;
     margin-right: 5px;

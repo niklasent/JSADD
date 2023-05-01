@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", loadPopup());
 async function loadPopup(containerInnerHtml) {
     var listContainer = document.getElementById("list-container");
     var listContainerContent = containerInnerHtml || listContainer.innerHTML;
-    var enabled = (await chrome.storage.sync.get({ enabled: true })).enabled;
+    var active = (await chrome.storage.sync.get({ active: true })).active;
     var darkMode = (await chrome.storage.sync.get({ darkMode: false })).darkMode;
     var activeTab = await getActiveTabURL();
-    if (!enabled) {
+    if (!active) {
         listContainer.innerHTML = "";
         var deactivationMessage = document.createElement("p");
         deactivationMessage.innerText = "JSAAD is deactivated.\nPress the power button to activate JSAAD."
@@ -94,7 +94,7 @@ async function loadPopup(containerInnerHtml) {
         });
     }
 
-    // Change appearance to dark mode when enabled.
+    // Change appearance to dark mode when active.
     if (darkMode) {
         var link = document.createElement('link');
         link.href = "./popup-dark.css";
@@ -109,12 +109,12 @@ async function loadPopup(containerInnerHtml) {
     document.getElementById("img-options").onclick = () => { chrome.runtime.openOptionsPage() };
     document.getElementById("img-switch").onclick = () => {
         var port = chrome.runtime.connect({name: "popup_port"});
-        if (enabled) { 
-            chrome.storage.sync.set({ enabled: false });
+        if (active) { 
+            chrome.storage.sync.set({ active: false });
             port.postMessage({ state: false, tabId: activeTab.id });
         }
         else { 
-            chrome.storage.sync.set({ enabled: true });
+            chrome.storage.sync.set({ active: true });
             port.postMessage({ state: true, tabId: activeTab.id });
         }
         loadPopup(listContainerContent);

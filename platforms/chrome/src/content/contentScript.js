@@ -1,7 +1,7 @@
 (async () => {
-    var enabled = (await chrome.storage.sync.get({ enabled: true })).enabled;
+    var active = (await chrome.storage.sync.get({ active: true })).active;
 
-    if (!enabled) {
+    if (!active) {
         return;
     }
 

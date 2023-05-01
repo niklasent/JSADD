@@ -1,4 +1,4 @@
-var enabled = true;
+var active = true;
 var scriptidentifier = 0;
 var portTabMap = {};
 var callFrameIDsTabMap = {};
@@ -22,7 +22,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 
 // Handle requests from content scripts.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    if (enabled) {
+    if (active) {
         // Respond the tab ID whenever requested.
         if (msg.req === "tabId") {
             sendResponse({tabId: sender.tab.id});
@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 
 // Register event listener for triggered breakpoints.
 chrome.debugger.onEvent.addListener((src, method, params) => {
-    if (enabled) {
+    if (active) {
         if (method === "Debugger.paused") {
             for (const callFrame of params.callFrames) {
                 if (!callFrameIDsTabMap[src.tabId]) callFrameIDsTabMap[src.tabId] = [];
@@ -64,7 +64,7 @@ chrome.runtime.onConnect.addListener(async function(port) {
     }
     else if (port.name === "popup_port") {
         port.onMessage.addListener(async function(msg) {
-            enabled = msg.state;
+            active = msg.state;
             await updateBadge(msg.tabId);
         });
     }
@@ -72,7 +72,7 @@ chrome.runtime.onConnect.addListener(async function(port) {
 
 // Register content scripts before page load.
 chrome.webNavigation.onCommitted.addListener((tab) => {
-    if (tab.frameId === 0 && enabled) {
+    if (tab.frameId === 0 && active) {
         // Register content scripts.
         chrome.scripting.registerContentScripts([{
             id: (scriptidentifier++).toString() + "_modifyEventTargets",
@@ -110,7 +110,7 @@ chrome.webNavigation.onCommitted.addListener((tab) => {
 
 // Register content scripts after page load.
 chrome.webNavigation.onCompleted.addListener((tab) => {
-    if (tab.frameId === 0 && enabled) {
+    if (tab.frameId === 0 && active) {
         // Register content scripts.
         chrome.scripting.registerContentScripts([{
             id: (scriptidentifier++).toString() + "_scanTechniques",
@@ -149,8 +149,8 @@ function checkTrigBreak(tabId) {
 async function updateBadge(tabId) {
     var badgeText = "";
     var showBadge = (await chrome.storage.sync.get({ showBadge: true })).showBadge;
-    enabled = (await chrome.storage.sync.get({ enabled: true })).enabled;
-    if (enabled) {
+    active = (await chrome.storage.sync.get({ active: true })).active;
+    if (active) {
         chrome.tabs.sendMessage(tabId, { req: "badge" }, (response) => {
             if (response) {
                 if (showBadge) badgeText = response.count.toString();
