@@ -1,4 +1,10 @@
 (async () => {
+    var active = (await chrome.storage.sync.get({ active: true })).active;
+
+    if (!active) {
+        return;
+    }
+
     var siteADTs = [];
 
     // Obtain tab ID.

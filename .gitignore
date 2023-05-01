@@ -4,3 +4,5 @@ platforms/chrome/assets/icons/unused/*
 platforms/firefox/assets/icons/unused/*
 
 platforms/firefox/*
+
+store_data/*

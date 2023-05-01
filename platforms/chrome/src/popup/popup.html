@@ -5,39 +5,45 @@
         <script type="module" src="popup.js"></script> 
     </head>
     <body>
-        <div class="container">
-            <div class="title">JSADD Scan Results</div>
-            <ul class="category-list">
-                <li id="category-impediment">
-                    <details>
-                        <summary id="impediment-sum">
-                            <div class="category-description" id="impediment-desc">Impediment</div>
-                            <div class="category-count" id="impediment-count">0/0</div>
-                        </summary>
-                        <ul id="impediment-list"> </ul>
-                    </details>
-                </li>
-                <li id="category-alteration">
-                    <details>
-                        <summary id="alteration-sum">
-                            <div class="category-description" id="alteration-desc">Alteration</div>
-                            <div class="category-count" id="alteration-count">0/0</div>
-                        </summary>
-                        <ul id="alteration-list"> </ul>
-                    </details>
-                </li>
-                <li id="category-detection">
-                    <details>
-                        <summary id = "detection-sum">
-                            <div class="category-description" id="detection-desc">Detection</div>
-                            <div class="category-count" id="detection-count">0/0</div>
-                        </summary>
-                        <ul id="detection-list"> </ul>
-                    </details>
-                </li>
-            </ul>
+        <div id="container">
+            <div id="title">JSADD Scan Results</div>
             <hr>
-            <a href="#"><img src="./img/gear.png" alt="Options" id="img-options"></a>
+            <div id="list-container">
+                <ul id="category-list">
+                    <li id="category-impediment">
+                        <details>
+                            <summary id="impediment-sum">
+                                <div class="category-description" id="impediment-desc">Impediment</div>
+                                <div class="category-count" id="impediment-count">0/0</div>
+                            </summary>
+                            <ul id="impediment-list"> </ul>
+                        </details>
+                    </li>
+                    <li id="category-alteration">
+                        <details>
+                            <summary id="alteration-sum">
+                                <div class="category-description" id="alteration-desc">Alteration</div>
+                                <div class="category-count" id="alteration-count">0/0</div>
+                            </summary>
+                            <ul id="alteration-list"> </ul>
+                        </details>
+                    </li>
+                    <li id="category-detection">
+                        <details>
+                            <summary id = "detection-sum">
+                                <div class="category-description" id="detection-desc">Detection</div>
+                                <div class="category-count" id="detection-count">0/0</div>
+                            </summary>
+                            <ul id="detection-list"> </ul>
+                        </details>
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <div id="control-elements">
+                <a href="#"><img src="./img/switch-active.png" alt="Options" id="img-switch"></a>
+                <a href="#"><img src="./img/gear.png" alt="Options" id="img-options"></a>
+            </div>
         </div>
     </body>
 </html>
