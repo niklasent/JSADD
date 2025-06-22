@@ -1,6 +1,6 @@
 # JSADD - JavaScript Anti-Debugging Detection Tool
 <p align = center>
-<a href="https://chrome.google.com/webstore/detail/jsadd-javascript-anti-deb/anebcnjpiakdhcnghhhndapcibdpgjcc"><img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png" alt="Get JSADD for Chrome"></a>
+<a href="https://chrome.google.com/webstore/detail/jsadd-javascript-anti-deb/anebcnjpiakdhcnghhhndapcibdpgjcc"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png" alt="Get JSADD for Chrome"></a>
 </p>
 
 ## About
